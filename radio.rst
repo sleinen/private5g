@@ -35,7 +35,7 @@ difference is rooted in each system’s fundamental assumption about
 utilization: Wi-Fi assumes a lightly loaded network (and hence
 optimistically transmits when the wireless link is idle and backs off
 if contention is detected), while 5G assumes (and strives for) high
-utilization (and hence explicitly assign different users to different
+utilization (and hence explicitly assigns different users to different
 “shares” of the available radio spectrum).
 
 The fact that 5G controls spectrum allocation carefully is central to
