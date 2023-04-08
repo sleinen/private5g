@@ -3,11 +3,10 @@ Stage 3: External Radio
 
 We are now ready to replace the emulated RAN with a physical small
 cell and real UEs. Unlike earlier stages of Aether OnRamp that worked
-exclusively with 5G, this stage allows either 4G or 5G small cells (but
-not both simultaneously). The following instructions are written for
-the 5G scenario, but as a general rule, you can substitute "4G" for
-"5G" in every command or file name.  Exceptions to that rule are
-explicitly noted.
+exclusively with 5G, this stage allows either 4G or 5G small cells
+(but not both simultaneously). The following instructions are written
+for the 5G scenario, but you can substitute "4G" for "5G" in every
+command or file name.  (Exceptions to that rule are explicitly noted.)
 
 In addition to the physical server used in previous stages, we now
 assume that server and the external radio are connected to the same L2
@@ -38,18 +37,18 @@ connectivity to the external radio, for example by typing:
            TX packets 2000815905  bytes 614846017824 (614.8 GB)
            TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
-In this example, the interface is ``enp193s0f0``, although we refer to
-it using the ``DATA_IFACE`` variable throughout this section.
+In what will serve as a running example throughout this section, the interface is
+``enp193s0f0`` with IP address ``10.76.28.113``.
 	   
 
 Local Blueprint
 ~~~~~~~~~~~~~~~
 
 Unlike earlier stages that took advantage of canned configurations,
-adding a physical base station means you will need to account for
-specifics of your local environment. Editing various configuration
-files is a necessary step in customizing a deployment, and so Aether
-OnRamp establishes a simple convention to help manage that process.
+adding a physical base station means you need to account for specifics
+of your local environment. Editing various configuration files is a
+necessary step in customizing a deployment, and so Aether OnRamp
+establishes a simple convention to help manage that process.
 
 Specifically, the ``blueprints`` directory currently defines four
 distinct ways to configure and deploy Aether:
@@ -122,9 +121,9 @@ directory, copy these files into it, and make your changes there.
 
 At this point, you need to make two edits. The first is to the
 ``DATA_IFACE`` variable in ``blueprints/radio/config``, changing it
-from ``eth0`` to whatever name you noted earlier (e.g.,
-``enp193s0f0``). The second is to the default ``BLUEPRINT`` setting in
-``MakefileVar.mk``, changing it from ``latest`` to
+from ``eth0`` to whatever name you noted earlier (e.g., ``enp193s0f0``
+in our running example). The second is to the default ``BLUEPRINT``
+setting in ``MakefileVar.mk``, changing it from ``latest`` to
 ``radio``. Alternatively, you can modify that variable on a
 case-by-case basis; for example:
 
@@ -134,7 +133,7 @@ case-by-case basis; for example:
 
 Going forward, you will be editing the ``yaml`` and ``json`` files in
 the ``radio`` blueprint, so we recommend familiarizing yourself with
-``radio/sd-core-5g-alt-values.yaml`` and ``radio/roc-5g-models.json``
+``radio/sd-core-5g-values.yaml`` and ``radio/roc-5g-models.json``
 (or their 4G counterparts).
    
 Prepare UEs 
@@ -202,7 +201,7 @@ are then ready to bring up the SD-Core as before:
 
    $ make 5g-core
 
-You can verify the installation by running ``kubectl`` just as you did
+You can verify the installation by running `kubectl` just as you did
 in Stage 1. You should see all pods with status ``Running``, keeping
 in mind that you will see containers that implement the 4G core
 instead of the 5G core running in the ``omec`` namespace if you
@@ -379,10 +378,10 @@ laborious GUI session).
 
 To bring up the ROC, you first need to edit
 ``radio/roc-5g-models.json`` to record the same IMSI information as
-before, editing, adding or removing ``sim-card`` entries as
+before. Do this by editing, adding or removing ``sim-card`` entries as
 necessary. Note that only the IMSIs need to match the earlier data;
 the ``sim-id`` and ``display-name`` values are arbitrary and need only
-be consistently *within* ``radio/roc-5g-models.json``.
+be consistent *within* ``radio/roc-5g-models.json``.
 
 .. code-block::
 
@@ -448,8 +447,8 @@ gNodeB Setup
 Once the SD-Core is up and running, we are ready to bring up the
 external gNodeB. The details of how to do this depend on the small
 cell you are using, but we identify the main issues you need to
-address. For examples of small cells commonly used with Aether, we
-recommend the two SERCOMM devices from the ONF MarketPlace:
+address. For example 4G and 5G small cells commonly used with Aether,
+we recommend the two SERCOMM devices on the ONF MarketPlace:
 
 .. _reading_sercomm:
 .. admonition:: Further Reading
@@ -466,11 +465,11 @@ The second of these (5G gNB) includes a `Users Guide
 <https://opennetworking.org/wp-content/uploads/2022/10/AiabSercomm-gNB-User-Guide_v1.2-20220922-Carl-Zhu.pdf>`__.
 We use details from the SERCOMM gNB in the following to make the
 discussion concrete, where the gNB is assigned IP address
-``10.76.28.187`` and the server hosting Aether is assigned IP address
-``10.76.28.113``. (Recall that we assume these are both on the same
-subnet.)  See :numref:`Figure %s <fig-sercomm>` for a screenshot of
-the SERCOMM gNB management dashboard, which we reference in the
-instructions that follow.
+``10.76.28.187`` and per our running example, the server hosting
+Aether is at IP address ``10.76.28.113``. (Recall that we assume these
+are both on the same subnet.)  See :numref:`Figure %s <fig-sercomm>`
+for a screenshot of the SERCOMM gNB management dashboard, which we
+reference in the instructions that follow.
 
 .. _fig-sercomm:
 .. figure:: ../figures/Sercomm.png 
